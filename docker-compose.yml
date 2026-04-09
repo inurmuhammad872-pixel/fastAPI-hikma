@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  fastapi:
+    build: .
+    container_name: hikma-api
+    ports:
+      - "8001:8000"
+    restart: always
