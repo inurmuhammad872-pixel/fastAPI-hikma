@@ -2,6 +2,7 @@ from datetime import date
 from pydantic import BaseModel
 from typing import Optional
 
+# TYPE USERS
 class TypeACreate(BaseModel):
     first_name: str
     last_name: str
@@ -12,6 +13,8 @@ class TypeACreate(BaseModel):
     region: str
     district: str
     role: str = "type_a"
+    password: str   # 🔥 qo‘shildi
+
 
 class TypeBCreate(BaseModel):
     first_name: str
@@ -20,6 +23,8 @@ class TypeBCreate(BaseModel):
     relation: str
     reference_code: Optional[str] = None
     role: str = "type_b"
+    password: str   # 🔥
+
 
 class TypeCCreate(BaseModel):
     first_name: str
@@ -29,3 +34,10 @@ class TypeCCreate(BaseModel):
     teacher_type: str
     subject: str
     role: str = "type_c"
+    password: str   # 🔥
+
+
+# AUTH
+class UserLogin(BaseModel):
+    phone: str
+    password: str
