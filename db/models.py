@@ -1,5 +1,8 @@
 from pydantic import BaseModel
 from datetime import date
+from sqlalchemy.orm import declarative_base
+
+Base = declarative_base()
 
 class TypeACreate(BaseModel):
     first_name: str
