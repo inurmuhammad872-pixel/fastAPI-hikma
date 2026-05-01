@@ -1,9 +1,9 @@
+from pydantic import BaseModel, EmailStr
 from datetime import date
-from pydantic import BaseModel
-from typing import Optional
-
 
 class TypeACreate(BaseModel):
+    email: EmailStr
+    password: str
     first_name: str
     last_name: str
     father_name: str
@@ -12,24 +12,27 @@ class TypeACreate(BaseModel):
     birth_date: date
     region: str
     district: str
-    password: str
-
-
+    
 class TypeBCreate(BaseModel):
+    email: EmailStr
+    password: str
     first_name: str
     last_name: str
+    father_name: str
     phone: str
+    gender: str
+    birth_date: date
+    region: str
+    district: str
     relation: str
-    password: str
-
 
 class TypeCCreate(BaseModel):
+    email: EmailStr
+    password: str
     first_name: str
     last_name: str
+    father_name: str
     phone: str
-    password: str
-
-
-class UserLogin(BaseModel):
-    phone: str
-    password: str
+   
+    
+    

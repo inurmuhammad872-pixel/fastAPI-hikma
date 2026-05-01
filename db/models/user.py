@@ -1,7 +1,13 @@
 from sqlalchemy import Column, String, Date
-from sqlalchemy.ext.declarative import declarative_base
+from db.database import Base
 
-Base = declarative_base()
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(String, primary_key=True, index=True)
+    email = Column(String, unique=True, index=True)
+    hashed_password = Column(String)
+    role = Column(String)
 
 
 class TypeAUser(Base):
@@ -16,7 +22,6 @@ class TypeAUser(Base):
     birth_date = Column(Date)
     region = Column(String)
     district = Column(String)
-    password = Column(String)
 
 
 class TypeBUser(Base):
@@ -25,10 +30,9 @@ class TypeBUser(Base):
     id = Column(String, primary_key=True, index=True)
     first_name = Column(String)
     last_name = Column(String)
+    father_name = Column(String)
     phone = Column(String, unique=True, index=True)
     relation = Column(String)
-    password = Column(String)
-
 
 class TypeCUser(Base):
     __tablename__ = "type_c_users"
@@ -36,5 +40,5 @@ class TypeCUser(Base):
     id = Column(String, primary_key=True, index=True)
     first_name = Column(String)
     last_name = Column(String)
+    father_name = Column(String)
     phone = Column(String, unique=True, index=True)
-    password = Column(String)
