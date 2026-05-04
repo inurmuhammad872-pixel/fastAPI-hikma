@@ -22,6 +22,10 @@ def get_db():
 
 @router.post("/type_a")
 def register_type_a(user: TypeACreate, db: Session = Depends(get_db)):
+    
+    print("PHONE:", user.phone)
+    print("EMAIL:", user.email)
+
     return create_type_a_user(db, user)
 
 
