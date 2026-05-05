@@ -20,6 +20,7 @@ def get_db():
         db.close()
 
 
+
 @router.post("/type_a")
 def register_type_a(user: TypeACreate, db: Session = Depends(get_db)):
     

@@ -1,21 +1,43 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
+from sqlalchemy.exc import IntegrityError
 import uuid
+
 from db.models.user import User, TypeAUser, TypeBUser, TypeCUser
 from core.security import hash_password
 
 
-def _create_user(db: Session, data, role):
-    # Duplicate email check
-    existing_user = db.query(User).filter(User.email == data.email).first()
+# -------------------------
+# Helper
+# -------------------------
+def normalize_phone(phone: str):
+    return phone.replace(" ", "").replace("-", "").strip()
 
-    if existing_user:
-        raise HTTPException(
-            status_code=409,
-            detail="User with this email already exists"
-        )
 
-    # Create auth user
+# -------------------------
+# Base Create Function
+# -------------------------
+def _create_user(db: Session, data, role: str):
+    # Normalize phone
+    phone = normalize_phone(data.phone)
+
+    # 1. Email check
+    existing_email = db.query(User).filter(User.email == data.email).first()
+    if existing_email:
+        raise HTTPException(409, "User with this email already exists")
+
+    # 2. Phone check (role-based table)
+    if role == "type_a":
+        existing_phone = db.query(TypeAUser).filter(TypeAUser.phone == phone).first()
+    elif role == "type_b":
+        existing_phone = db.query(TypeBUser).filter(TypeBUser.phone == phone).first()
+    else:
+        existing_phone = db.query(TypeCUser).filter(TypeCUser.phone == phone).first()
+
+    if existing_phone:
+        raise HTTPException(400, "Phone number already registered")
+
+    # 3. Create User (auth table)
     user = User(
         id=str(uuid.uuid4()),
         email=data.email,
@@ -24,19 +46,22 @@ def _create_user(db: Session, data, role):
     )
 
     db.add(user)
-    db.commit()
-    db.refresh(user)
 
-    # Create profile by role
-    user_data = None
+    try:
+        db.commit()
+        db.refresh(user)
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(400, "User creation failed")
 
+    # 4. Create Profile
     if role == "type_a":
-        user_data = TypeAUser(
+        profile = TypeAUser(
             id=user.id,
             first_name=data.first_name,
             last_name=data.last_name,
             father_name=data.father_name,
-            phone=data.phone,
+            phone=phone,
             gender=data.gender,
             birth_date=data.birth_date,
             region=data.region,
@@ -44,34 +69,34 @@ def _create_user(db: Session, data, role):
         )
 
     elif role == "type_b":
-        user_data = TypeBUser(
+        profile = TypeBUser(
             id=user.id,
             first_name=data.first_name,
             last_name=data.last_name,
             father_name=data.father_name,
-            phone=data.phone,
+            phone=phone,
             relation=data.relation
         )
 
     elif role == "type_c":
-        user_data = TypeCUser(
+        profile = TypeCUser(
             id=user.id,
             first_name=data.first_name,
             last_name=data.last_name,
             father_name=data.father_name,
-            phone=data.phone
+            phone=phone
         )
 
-    # Validate role
-    if not user_data:
-        raise HTTPException(
-            status_code=400,
-            detail="Invalid user type"
-        )
+    else:
+        raise HTTPException(400, "Invalid user type")
 
-    # Save profile
-    db.add(user_data)
-    db.commit()
+    db.add(profile)
+
+    try:
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(400, "Phone already exists")
 
     return {
         "message": "User created",
@@ -80,6 +105,9 @@ def _create_user(db: Session, data, role):
     }
 
 
+# -------------------------
+# Public Functions
+# -------------------------
 def create_type_a_user(db: Session, data):
     return _create_user(db, data, "type_a")
 
