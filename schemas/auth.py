@@ -6,6 +6,8 @@ class UserRegister(BaseModel):
     phone: str
     password: str
 
+class GoogleTokenRequest(BaseModel):
+    access_token: str
 
 class UserLogin(BaseModel):
     email: Optional[EmailStr] = None
