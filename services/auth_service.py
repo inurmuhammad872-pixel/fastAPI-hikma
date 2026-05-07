@@ -77,3 +77,4 @@ def login_user(db: Session, data):
         "access_token": token,
         "token_type": "bearer"
     }
+
