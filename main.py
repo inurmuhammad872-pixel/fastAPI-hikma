@@ -3,12 +3,14 @@ from db.database import engine, Base
 from fastapi.middleware.cors import CORSMiddleware
 from api.routes.user import router as user_router
 from api.routes.auth import router as auth_router
+from api.routes import focus
 
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     root_path="/api"
 )
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -26,3 +28,4 @@ app.add_middleware(
 # Include routers
 app.include_router(user_router)
 app.include_router(auth_router)
+app.include_router(focus.router)
