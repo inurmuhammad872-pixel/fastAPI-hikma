@@ -6,6 +6,7 @@ from api.routes.auth import router as auth_router
 from api.routes import focus
 from api.routes.growth import router as growth_router
 from api.routes.thinking_tools import thinking_tools
+from api.routes.thinking.thinking import router as thinking_router
 
 Base.metadata.create_all(bind=engine)
 
@@ -34,3 +35,4 @@ app.include_router(focus.router)
 app.include_router(growth_router)
 
 app.include_router(thinking_tools.router)
+app.include_router(thinking_router)
