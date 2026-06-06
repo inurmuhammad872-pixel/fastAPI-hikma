@@ -17,7 +17,7 @@ from api.routes.personal_growth.discipline import router as discipline_router
 from api.routes.personal_growth.goal import router as goal_router
 from api.routes.personal_growth.self_assessment import router as self_assessment_router
 from api.routes.personal_growth.career import router as career_router
-from api.routes.personal_growth.dashboard import router as dashboard_router
+from api.routes.personal_growth.parent_dashboard import router as dashboard_router
 from api.routes.personal_growth.parent_dashboard import router as parent_dashboard_router
 
 Base.metadata.create_all(bind=engine)
