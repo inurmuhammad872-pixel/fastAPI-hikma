@@ -11,6 +11,15 @@ from api.routes.personal_growth.self_awareness import (
     router as self_awareness_router
 )
 
+from api.routes.personal_growth.self_awareness import router as self_awareness_router
+from api.routes.personal_growth.skill import router as skill_router
+from api.routes.personal_growth.discipline import router as discipline_router
+from api.routes.personal_growth.goal import router as goal_router
+from api.routes.personal_growth.self_assessment import router as self_assessment_router
+from api.routes.personal_growth.career import router as career_router
+from api.routes.personal_growth.dashboard import router as dashboard_router
+from api.routes.personal_growth.parent_dashboard import router as parent_dashboard_router
+
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
@@ -43,3 +52,13 @@ app.include_router(
 )
 app.include_router(thinking_tools.router)
 app.include_router(thinking_router)
+
+
+app.include_router(self_awareness_router)
+app.include_router(skill_router)
+app.include_router(discipline_router)
+app.include_router(goal_router)
+app.include_router(self_assessment_router)
+app.include_router(career_router)
+app.include_router(dashboard_router)
+app.include_router(parent_dashboard_router)
