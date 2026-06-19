@@ -22,4 +22,8 @@ def analyze_pdsa(data: PDSARequest):
     - Act
     """
 
-    return ask_ai(system_prompt, user_prompt)
+    return ask_ai(
+        system_prompt=system_prompt,
+        user_prompt=user_prompt,
+        task_name="cause_effect"
+    )

@@ -25,6 +25,8 @@ def analyze_five_why(data: FiveWhyRequest):
     - Final Conclusion
     """
 
-    result = ask_ai(system_prompt, user_prompt)
-
-    return result
+    return ask_ai(
+        system_prompt=system_prompt,
+        user_prompt=user_prompt,
+        task_name="cause_effect"
+    )
