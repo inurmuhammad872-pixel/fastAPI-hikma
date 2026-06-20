@@ -25,6 +25,8 @@ AI_TASKS = {
     "parent_summary": "openai",
 
     "learning_profile": "openai",
+    
+    "question_generator": "openai",
 }
 
 
