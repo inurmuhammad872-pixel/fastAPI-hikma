@@ -22,8 +22,15 @@ AI_TASKS = {
 
     "conclusion": "openai",
 
-    "parent_summary": "claude",
+    "parent_summary": "openai",
 
-    "learning_profile": "claude"
-
+    "learning_profile": "openai",
 }
+
+
+def get_provider(task_name: str):
+
+    return AI_TASKS.get(
+        task_name,
+        "openai"
+    )
