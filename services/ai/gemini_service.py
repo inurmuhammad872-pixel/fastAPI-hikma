@@ -20,22 +20,18 @@ def ask_gemini(
     user_prompt: str
 ):
 
-    try:
-
-        prompt = f"""
+    prompt = f"""
 {system_prompt}
 
 {user_prompt}
 """
 
-        response = model.generate_content(
-            prompt
-        )
+    response = model.generate_content(
+        prompt
+    )
 
-        return response.text
+    print("RAW GEMINI:", response)
 
-    except Exception as e:
+    print("RAW TEXT:", response.text)
 
-        print("GEMINI ERROR:", e)
-
-        return f"Gemini error: {str(e)}"
+    return response.text
