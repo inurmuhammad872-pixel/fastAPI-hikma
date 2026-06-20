@@ -3,6 +3,8 @@ from db.models.personal_growth.skill import Skill
 from db.models.personal_growth.discipline import Habit
 from db.models.personal_growth.self_assessment import SelfAssessment
 
+from services.ai.parent_summary_service import generate_parent_summary
+
 
 def get_parent_dashboard(
     db,
@@ -42,10 +44,44 @@ def get_parent_dashboard(
         SelfAssessment.created_at.desc()
     ).first()
 
-    return {
+    dashboard_data = {
+
         "goals_count": goals_count,
+
         "completed_goals": completed_goals,
+
         "skills_count": len(skills),
+
         "habits_count": habits_count,
-        "latest_assessment": latest_assessment
+
+        "latest_assessment": (
+
+            {
+                "confidence": latest_assessment.confidence,
+
+                "motivation": latest_assessment.motivation,
+
+                "focus": latest_assessment.focus,
+
+                "social": latest_assessment.social,
+
+                "stress": latest_assessment.stress
+
+            }
+
+            if latest_assessment
+
+            else "No assessment yet"
+        )
+    }
+
+    ai_summary = generate_parent_summary(
+        dashboard_data
+    )
+
+    return {
+
+        "dashboard": dashboard_data,
+
+        "ai_summary": ai_summary
     }

@@ -1,20 +1,36 @@
-class ParentSummaryService:
+from services.ai.base_ai_service import ask_ai
 
-    def __init__(self, ai_service):
-        self.ai_service = ai_service
 
-    async def generate_summary(
-        self,
-        student_name: str,
-        scores: dict
-    ):
-        prompt = f"""
-        Student: {student_name}
+def generate_parent_summary(data):
 
-        Scores:
-        {scores}
+    system_prompt = """
+You are an educational mentor inside Hikma platform.
 
-        Write a short parent-friendly summary.
-        """
+Analyze student's progress.
 
-        return await self.ai_service.generate(prompt)
+Your job:
+
+- Explain strengths
+- Explain weaknesses
+- Give recommendations for parents
+- Keep it concise
+- Return response in Uzbek language.
+"""
+
+    user_prompt = f"""
+Goals count: {data['goals_count']}
+
+Completed goals: {data['completed_goals']}
+
+Skills count: {data['skills_count']}
+
+Habits count: {data['habits_count']}
+
+Latest assessment: {data['latest_assessment']}
+"""
+
+    return ask_ai(
+        system_prompt=system_prompt,
+        user_prompt=user_prompt,
+        task_name="parent_summary"
+    )
