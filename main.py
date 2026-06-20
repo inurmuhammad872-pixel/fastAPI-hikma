@@ -19,6 +19,9 @@ from api.routes.personal_growth.self_assessment import router as self_assessment
 from api.routes.personal_growth.career import router as career_router
 from api.routes.personal_growth.parent_dashboard import router as dashboard_router
 from api.routes.personal_growth.parent_dashboard import router as parent_dashboard_router
+from api.routes.personal_growth import (
+    learning_profile
+)
 
 Base.metadata.create_all(bind=engine)
 
@@ -59,6 +62,12 @@ app.include_router(skill_router)
 app.include_router(discipline_router)
 app.include_router(goal_router)
 app.include_router(self_assessment_router)
+app.include_router(
+    learning_profile.router,
+    prefix="/api"
+)
 app.include_router(career_router)
 app.include_router(dashboard_router)
 app.include_router(parent_dashboard_router)
+
+
