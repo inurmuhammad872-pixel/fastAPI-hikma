@@ -27,7 +27,19 @@ router = APIRouter(
 @router.post("/swot")
 async def swot_analysis(data: SWOTRequest):
 
-    result = analyze_swot(data)
+    result = analyze_swot(
+
+        topic=data.topic,
+
+        strengths=data.strengths,
+
+        weaknesses=data.weaknesses,
+
+        opportunities=data.opportunities,
+
+        threats=data.threats
+
+    )
 
     return {
         "success": True,
