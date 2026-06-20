@@ -24,3 +24,52 @@ def ask_ai(
     provider = get_provider(task_name)
 
     print("PROVIDER:", provider)
+
+    if provider == "claude":
+
+        result = ask_claude(
+            system_prompt=system_prompt,
+            user_prompt=user_prompt
+        )
+
+        print("CLAUDE RESULT:", result)
+
+        return result
+
+    if provider == "gemini":
+
+        result = ask_gemini(
+            system_prompt=system_prompt,
+            user_prompt=user_prompt
+        )
+
+        print("GEMINI RESULT:", result)
+
+        return result
+
+    response = client.chat.completions.create(
+
+        model="gpt-4.1-mini",
+
+        messages=[
+
+            {
+                "role": "system",
+                "content": system_prompt
+            },
+
+            {
+                "role": "user",
+                "content": user_prompt
+            }
+
+        ],
+
+        temperature=0.7
+    )
+
+    result = response.choices[0].message.content
+
+    print("OPENAI RESULT:", result)
+
+    return result
