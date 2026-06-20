@@ -1,46 +1,40 @@
-from openai import OpenAI
-from dotenv import load_dotenv
-import os
 from services.ai.base_ai_service import ask_ai
-from schemas.thinking_tools.thinking_tools import SWOTRequest
-
-load_dotenv()
-
-client = OpenAI(
-    api_key=os.getenv("OPENAI_API_KEY")
-)
 
 
-def analyze_swot(data: SWOTRequest):
+def analyze_swot(
+    topic,
+    strengths,
+    weaknesses,
+    opportunities,
+    threats
+):
 
-    prompt = f"""
-    Topic: {data.topic}
+    system_prompt = """
+    You are an expert SWOT analyst.
 
-    Strengths:
-    {", ".join(data.strengths)}
+    Analyze the SWOT information.
 
-    Weaknesses:
-    {", ".join(data.weaknesses)}
-
-    Opportunities:
-    {", ".join(data.opportunities)}
-
-    Threats:
-    {", ".join(data.threats)}
+    Give actionable recommendations.
     """
 
-    response = client.chat.completions.create(
-        model="gpt-4.1-mini",
-        messages=[
-            {
-                "role": "system",
-                "content": "You are a SWOT analysis assistant."
-            },
-            {
-                "role": "user",
-                "content": prompt
-            }
-        ]
-    )
+    user_prompt = f"""
+    Topic: {topic}
 
-    return response.choices[0].message.content
+    Strengths:
+    {strengths}
+
+    Weaknesses:
+    {weaknesses}
+
+    Opportunities:
+    {opportunities}
+
+    Threats:
+    {threats}
+    """
+
+    return ask_ai(
+        system_prompt=system_prompt,
+        user_prompt=user_prompt,
+        task_name="swot"
+    )
