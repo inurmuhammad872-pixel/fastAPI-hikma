@@ -1,20 +1,20 @@
 AI_TASKS = {
 
-    "logical": "gemini",
+    "logical": "openai",
 
-    "cause_effect": "gemini",
+    "cause_effect": "openai",
 
-    "questioning": "gemini",
+    "questioning": "openai",
 
-    "five_why": "gemini",
+    "five_why": "openai",
 
-    "swot": "gemini",
+    "swot": "openai",
 
-    "pareto": "gemini",
+    "pareto": "openai",
 
-    "pdsa": "gemini",
+    "pdsa": "openai",
 
-    "decision_matrix": "gemini",
+    "decision_matrix": "openai",
 
     "creative": "openai",
 
@@ -24,13 +24,6 @@ AI_TASKS = {
 
     "parent_summary": "claude",
 
-    "learning_profile": "claude",
+    "learning_profile": "claude"
+
 }
-
-
-def get_provider(task_name: str):
-
-    return AI_TASKS.get(
-        task_name,
-        "openai"
-    )
