@@ -10,6 +10,8 @@ AI_TASKS = {
 
     "creative": "openai",
 
+    "critical": "openai",
+
     "conclusion": "openai",
 
     # Thinking Tools
@@ -35,3 +37,11 @@ AI_TASKS = {
     "learning_profile": "claude",
 
 }
+
+
+def get_provider(task_name: str):
+
+    return AI_TASKS.get(
+        task_name,
+        "openai"
+    )
