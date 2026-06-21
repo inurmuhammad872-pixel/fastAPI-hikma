@@ -4,18 +4,22 @@ from db.models.personal_growth.self_awareness import (
     SelfAwarenessAnswer
 )
 
+from services.ai.question_generator_service import (
+    generate_questions
+)
+
 from db.models.personal_growth.self_awareness import (
-    SelfAwarenessQuestion,
     SelfAwarenessAnswer
 )
 
 
-def get_questions(db):
-    questions = db.query(
-        SelfAwarenessQuestion
-    ).all()
 
-    return questions
+
+def get_questions(db):
+
+    return generate_questions(
+        "self_awareness"
+    )
 
 def create_answer(
     db: Session,
