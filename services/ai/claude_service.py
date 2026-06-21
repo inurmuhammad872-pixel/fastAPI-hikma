@@ -16,7 +16,7 @@ def ask_claude(
 ):
 
     response = client.messages.create(
-        model="claude-sonnet-4-0",
+        model="claude-sonnet-4-5",
 
         max_tokens=1000,
 
