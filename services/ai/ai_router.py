@@ -1,10 +1,18 @@
 AI_TASKS = {
 
+    # Thinking
+
     "logical": "openai",
 
     "cause_effect": "openai",
 
     "questioning": "openai",
+
+    "creative": "openai",
+
+    "conclusion": "openai",
+
+    # Thinking Tools
 
     "five_why": "openai",
 
@@ -16,23 +24,14 @@ AI_TASKS = {
 
     "decision_matrix": "openai",
 
-    "creative": "openai",
+    # Growth
 
-    "critical": "openai",
-
-    "conclusion": "openai",
-
-    "parent_summary": "openai",
-
-    "learning_profile": "openai",
-    
     "question_generator": "openai",
+
+    # Reports
+
+    "parent_summary": "claude",
+
+    "learning_profile": "claude",
+
 }
-
-
-def get_provider(task_name: str):
-
-    return AI_TASKS.get(
-        task_name,
-        "openai"
-    )
