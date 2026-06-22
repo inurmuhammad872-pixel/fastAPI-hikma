@@ -1,16 +1,13 @@
 from pydantic import BaseModel
-from typing import List
 
 
-class FiveWhyRequest(BaseModel):
+class FiveWhyQuestionRequest(BaseModel):
+
     problem: str
 
 
-class FiveWhyResponse(BaseModel):
+class FiveWhyAnalyzeRequest(BaseModel):
+
     problem: str
-    why_1: str
-    why_2: str
-    why_3: str
-    why_4: str
-    root_cause: str
-    conclusion: str
+
+    answers: list[str]

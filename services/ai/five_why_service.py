@@ -1,53 +1,95 @@
-from schemas.thinking_tools.five_why import FiveWhyRequest
-
 from services.ai.base_ai_service import ask_ai
 
 
-def analyze_five_why(
-    data: FiveWhyRequest
+def generate_five_why_questions(
+    problem
 ):
 
     system_prompt = """
-You are an expert root cause analysis mentor inside Hikma platform.
+You are an educational AI mentor inside Hikma platform.
 
-Your task is to perform a Five Why analysis.
+Generate exactly 5 consecutive why questions.
 
 Rules:
 
-- Generate exactly 5 why steps.
-- Find the root cause.
-- Give one practical recommendation.
-- Return the answer in Uzbek language.
-- Keep the answer concise and clear.
+- Each question must depend on the previous one.
+
+- Return Uzbek language.
+
+- Return only numbered questions.
 """
 
     user_prompt = f"""
+
 Problem:
 
-{data.problem}
+{problem}
+"""
 
-Return using this exact structure.
+    return ask_ai(
 
-1. Why:
-...
+        system_prompt=system_prompt,
 
-2. Why:
-...
+        user_prompt=user_prompt,
 
-3. Why:
-...
+        task_name="five_why"
+    )
 
-4. Why:
-...
 
-5. Why:
-...
+def analyze_five_why(
+    problem,
+    answers
+):
+
+    formatted_answers = "\n".join(
+
+        [
+
+            f"Why {i+1}: {answer}"
+
+            for i, answer in enumerate(
+
+                answers
+
+            )
+        ]
+    )
+
+    system_prompt = """
+You are an educational AI mentor inside Hikma platform.
+
+Analyze the user's Five Why answers.
+
+Tasks:
+
+- Find the root cause
+
+- Give constructive feedback
+
+- Create exactly 3 action steps
+
+Return Uzbek language.
+
+Keep the answer concise.
+"""
+
+    user_prompt = f"""
+
+Problem:
+
+{problem}
+
+User answers:
+
+{formatted_answers}
+
+Generate:
 
 Root Cause:
-...
 
-Recommendation:
-...
+Feedback:
+
+Action Plan:
 """
 
     return ask_ai(
