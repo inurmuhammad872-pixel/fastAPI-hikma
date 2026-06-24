@@ -22,6 +22,9 @@ from api.routes.personal_growth.parent_dashboard import router as parent_dashboa
 from api.routes.personal_growth import (
     learning_profile
 )
+from api.routes.thinking.observe import (
+    router as observe_router
+)
 
 Base.metadata.create_all(bind=engine)
 
@@ -69,5 +72,5 @@ app.include_router(
 app.include_router(career_router)
 app.include_router(dashboard_router)
 app.include_router(parent_dashboard_router)
-
+app.include_router(observe_router)
 
