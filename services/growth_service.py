@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from db.models.growth_question import GrowthQuestion
 from db.models.growth_answer import GrowthAnswer
 
-from services.ai.logical_service import (
+from services.ai.logical_thinking_service import (
     generate_logical_questions,
     analyze_logical_answers
 )
