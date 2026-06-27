@@ -7,7 +7,11 @@ from api.deps.auth import get_current_user
 from services.growth_service import (
     get_questions_by_category,
     create_answer,
-    get_user_answers
+    get_user_answers,
+
+    generate_ai_questions,
+    save_logical_answer,
+    analyze_answers
 )
 
 from schemas.growth import (
@@ -16,10 +20,21 @@ from schemas.growth import (
     AnswerResponse
 )
 
+from schemas.thinking.logical import (
+    LogicalQuestionRequest,
+    LogicalAnswerRequest,
+    LogicalAnalyzeRequest
+)
+
 router = APIRouter(
     prefix="/growth",
     tags=["Growth"]
 )
+
+
+# ===================================================
+# Growth
+# ===================================================
 
 @router.get(
     "/questions/{category}",
@@ -30,7 +45,11 @@ def get_questions(
     category: str,
     db: Session = Depends(get_db)
 ):
-    return get_questions_by_category(db, category)
+    return get_questions_by_category(
+        db,
+        category
+    )
+
 
 @router.post(
     "/answers",
@@ -40,7 +59,7 @@ def get_questions(
 def submit_answer(
     data: AnswerCreate,
     db: Session = Depends(get_db),
-    current_user = Depends(get_current_user)
+    current_user=Depends(get_current_user)
 ):
     return create_answer(
         db=db,
@@ -49,6 +68,7 @@ def submit_answer(
         answer=data.answer
     )
 
+
 @router.get(
     "/my-answers",
     response_model=list[AnswerResponse],
@@ -56,9 +76,80 @@ def submit_answer(
 )
 def my_answers(
     db: Session = Depends(get_db),
-    current_user = Depends(get_current_user)
+    current_user=Depends(get_current_user)
 ):
     return get_user_answers(
         db,
         current_user["id"]
     )
+
+
+# ===================================================
+# Logical Thinking AI
+# ===================================================
+
+@router.post(
+    "/logical/questions",
+    status_code=status.HTTP_200_OK
+)
+def logical_questions(
+    data: LogicalQuestionRequest
+):
+
+    return {
+
+        "success": True,
+
+        "data": generate_ai_questions(
+            data.scenario
+        )
+
+    }
+
+
+@router.post(
+    "/logical/answer",
+    status_code=status.HTTP_201_CREATED
+)
+def logical_answer(
+    data: LogicalAnswerRequest,
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user)
+):
+
+    return save_logical_answer(
+
+        db=db,
+
+        user_id=current_user["id"],
+
+        question_id=data.question_id,
+
+        step=data.step,
+
+        ai_question=data.ai_question,
+
+        answer=data.answer
+
+    )
+
+
+@router.post(
+    "/logical/analyze",
+    status_code=status.HTTP_200_OK
+)
+def logical_analyze(
+    data: LogicalAnalyzeRequest,
+    db: Session = Depends(get_db)
+):
+
+    return {
+
+        "success": True,
+
+        "data": analyze_answers(
+            db,
+            data.question_id
+        )
+
+    }
