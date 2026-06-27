@@ -1,8 +1,15 @@
-# api/routes/thinking.py
-
 from fastapi import APIRouter
 
-from schemas.thinking.logical import LogicalThinkingRequest
+from schemas.thinking.logical import (
+    LogicalQuestionRequest,
+    LogicalAnalyzeRequest
+)
+
+from services.ai.logical_thinking_service import (
+    generate_logical_questions,
+    analyze_logical_answers
+)
+
 from schemas.thinking.creative import CreativeThinkingRequest
 from schemas.thinking.cause_effect import CauseEffectRequest
 from schemas.thinking.questioning import QuestioningRequest
@@ -12,7 +19,6 @@ from services.ai.creative_thinking_service import evaluate_creative
 from services.ai.cause_effect_service import evaluate_cause_effect
 from services.ai.questioning_service import evaluate_questioning
 from services.ai.conclusion_service import evaluate_conclusion
-from services.ai.logical_thinking_service import evaluate_logical
 
 router = APIRouter(
     prefix="/thinking",
@@ -20,18 +26,39 @@ router = APIRouter(
 )
 
 
-@router.post("/logical")
-async def logical_thinking(data: LogicalThinkingRequest):
+@router.post("/logical/questions")
+async def logical_questions(data: LogicalQuestionRequest):
 
-    result = evaluate_logical(
-        question=data.question,
-        answer=data.answer
+    result = generate_logical_questions(
+        data.scenario
     )
 
     return {
         "success": True,
         "data": result
     }
+
+
+@router.post("/logical/analyze")
+async def logical_analyze(data: LogicalAnalyzeRequest):
+
+    answers_text = "\n".join(
+        [
+            f"Question: {item.question}\nAnswer: {item.answer}"
+            for item in data.answers
+        ]
+    )
+
+    result = analyze_logical_answers(
+        scenario=data.scenario,
+        answers=answers_text
+    )
+
+    return {
+        "success": True,
+        "data": result
+    }
+
 
 @router.post("/creative")
 async def creative_thinking(data: CreativeThinkingRequest):
@@ -48,7 +75,7 @@ async def creative_thinking(data: CreativeThinkingRequest):
 
 
 @router.post("/cause-effect")
-async def cause_effect_thinking(data: CauseEffectRequest):
+async def cause_effect(data: CauseEffectRequest):
 
     result = evaluate_cause_effect(
         question=data.question,
@@ -62,7 +89,7 @@ async def cause_effect_thinking(data: CauseEffectRequest):
 
 
 @router.post("/questioning")
-async def questioning_thinking(data: QuestioningRequest):
+async def questioning(data: QuestioningRequest):
 
     result = evaluate_questioning(
         question=data.question,
@@ -76,7 +103,7 @@ async def questioning_thinking(data: QuestioningRequest):
 
 
 @router.post("/conclusion")
-async def conclusion_thinking(data: ConclusionRequest):
+async def conclusion(data: ConclusionRequest):
 
     result = evaluate_conclusion(
         question=data.question,
@@ -87,7 +114,3 @@ async def conclusion_thinking(data: ConclusionRequest):
         "success": True,
         "data": result
     }
-
-# TODO:
-# Critical Thinking AI Evaluation
-# Will be implemented later

@@ -5,12 +5,15 @@ class LogicalQuestionRequest(BaseModel):
     scenario: str
 
 
-class LogicalAnswerRequest(BaseModel):
-    question_id: int
-    step: int
-    ai_question: str
+class LogicalQuestionResponse(BaseModel):
+    questions: list[str]
+
+
+class LogicalAnswerItem(BaseModel):
+    question: str
     answer: str
 
 
 class LogicalAnalyzeRequest(BaseModel):
-    question_id: int
+    scenario: str
+    answers: list[LogicalAnswerItem]

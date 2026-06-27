@@ -109,30 +109,35 @@ def save_logical_answer(
 
 def analyze_answers(
     db: Session,
-    question_id: int
+    question_id: int,
+    scenario: str
 ):
 
-    answers = db.query(
-        GrowthAnswer
-    ).filter(
-        GrowthAnswer.question_id == question_id
-    ).order_by(
-        GrowthAnswer.step
-    ).all()
+    answers = (
+        db.query(GrowthAnswer)
+        .filter(
+            GrowthAnswer.question_id == question_id
+        )
+        .order_by(
+            GrowthAnswer.step
+        )
+        .all()
+    )
 
-    answer_list = [
+    answers_text = ""
 
-        item.answer
+    for item in answers:
 
-        for item in answers
-
-    ]
+        answers_text += (
+            f"Question {item.step}: {item.ai_question}\n"
+            f"Answer: {item.answer}\n\n"
+        )
 
     result = analyze_logical_answers(
 
-        "",
+        scenario,
 
-        answer_list
+        answers_text
 
     )
 
