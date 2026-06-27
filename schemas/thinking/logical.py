@@ -1,6 +1,9 @@
 from pydantic import BaseModel
 
 
+from pydantic import BaseModel
+
+
 class LogicalQuestionRequest(BaseModel):
     scenario: str
 
@@ -14,6 +17,12 @@ class LogicalAnswerItem(BaseModel):
     answer: str
 
 
+class LogicalAnswerRequest(BaseModel):
+    question_id: int
+    step: int
+    ai_question: str
+    answer: str
+
+
 class LogicalAnalyzeRequest(BaseModel):
-    scenario: str
-    answers: list[LogicalAnswerItem]
+    question_id: int
